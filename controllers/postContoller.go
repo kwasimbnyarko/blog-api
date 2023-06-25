@@ -114,6 +114,7 @@ func ViewAllPostsFromUser() gin.HandlerFunc {
 		}
 
 		defer cancel()
+
 		defer func(cursor *mongo.Cursor, ctx context.Context) {
 			err := cursor.Close(ctx)
 			if err != nil {
@@ -127,9 +128,14 @@ func ViewAllPostsFromUser() gin.HandlerFunc {
 			if err = cursor.Decode(&post); err != nil {
 				log.Fatal(err)
 			}
-			if *post.Username == username {
+			if post.Username == username {
 				posts = append(posts, post)
 			}
+		}
+
+		if posts == nil {
+			c.JSON(http.StatusNotFound, bson.M{"msg": "user not found"})
+			return
 		}
 
 		c.JSON(http.StatusOK, posts)
