@@ -32,7 +32,7 @@ func main() {
 		c.JSON(200, gin.H{"success": "Access granted for api-2"})
 	})
 
-	err = router.Run(":" + port)
+	err = router.Run("0.0.0.0:" + port)
 	if err != nil {
 		return
 	}
