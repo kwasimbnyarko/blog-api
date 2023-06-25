@@ -13,6 +13,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 var validate = validator.New()
@@ -136,7 +137,58 @@ func ViewAllPostsFromUser() gin.HandlerFunc {
 }
 
 func UpdatePost() gin.HandlerFunc {
-	return func(ctx *gin.Context) {}
+	type body struct {
+		Text string `json:"text" bson:"text"`
+	}
+	return func(c *gin.Context) {
+		postId := c.Param("postId")
+
+		var post models.Post
+		var body body
+
+		if err := c.BindJSON(&body); err != nil {
+			c.JSON(http.StatusBadRequest, bson.M{"error": "incorrect request body"})
+		}
+
+		ctx, cancel := context.WithTimeout(context.Background(), time.Second*15)
+		defer cancel()
+
+		err := postCollection.FindOne(ctx, bson.M{"post_id": postId}).Decode(&post)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, bson.M{"error": "error occurred in finding post"})
+			log.Fatal(err)
+		}
+
+		var updateObj primitive.D
+
+		updateObj = append(updateObj, bson.E{Key: "text", Value: body.Text})
+		updatedAt, _ := time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
+		updateObj = append(updateObj, bson.E{Key: "updated_At", Value: updatedAt})
+
+		upsert := true
+		filter := bson.M{"post_id": postId}
+
+		opt := options.UpdateOptions{
+			Upsert: &upsert,
+		}
+
+		result, err := postCollection.UpdateOne(
+			ctx,
+			filter,
+			bson.D{{Key: "$set", Value: updateObj}},
+			&opt)
+
+		defer cancel()
+
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, bson.M{"error": "update unsuccessfull"})
+
+			log.Panicln(err)
+
+		}
+
+		c.JSON(http.StatusOK, result)
+	}
 }
 
 func DeletePost() gin.HandlerFunc {
