@@ -192,5 +192,19 @@ func UpdatePost() gin.HandlerFunc {
 }
 
 func DeletePost() gin.HandlerFunc {
-	return func(ctx *gin.Context) {}
+	return func(c *gin.Context) {
+		postId := c.Param("postId")
+
+		ctx, cancel := context.WithTimeout(context.Background(), time.Second*15)
+		defer cancel()
+
+		result, err := postCollection.DeleteOne(ctx, bson.M{"post_id": postId})
+
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, bson.M{"error": "error occurred upon deletion"})
+			log.Fatal(err)
+		}
+
+		c.JSON(http.StatusOK, result)
+	}
 }
