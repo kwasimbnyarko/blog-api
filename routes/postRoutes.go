@@ -7,11 +7,11 @@ import (
 
 func PostRoutes(incomingRoutes *gin.Engine) {
 
-	incomingRoutes.POST("/post", controllers.CreatePost())
-	incomingRoutes.GET("/post/:postId", controllers.ViewPost())
-	incomingRoutes.GET("/post", controllers.ViewAllPost())
-	incomingRoutes.GET("/post/user/:username", controllers.ViewAllPostsFromUser())
-	incomingRoutes.PUT("/post/:postId", controllers.UpdatePost())
-	incomingRoutes.DELETE("/post/:postId", controllers.DeletePost())
+	incomingRoutes.POST("/api/post", controllers.CreatePost())
+	incomingRoutes.GET("/api/post/:postId", controllers.ViewPost())
+	incomingRoutes.GET("/api/post", controllers.ViewAllPost())
+	incomingRoutes.GET("/api/post/user/:username", controllers.ViewAllPostsFromUser())
+	incomingRoutes.PUT("/api/post/:postId", controllers.UpdatePost())
+	incomingRoutes.DELETE("/api/post/:postId", controllers.DeletePost())
 
 }
