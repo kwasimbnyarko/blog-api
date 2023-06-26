@@ -1,11 +1,12 @@
 package main
 
 import (
+	"log"
+	"os"
+
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"github.com/kwasimbnyarko/blog-api/routes"
-	"log"
-	"os"
 )
 
 func main() {
@@ -32,7 +33,7 @@ func main() {
 		c.JSON(200, gin.H{"success": "Access granted for api-2"})
 	})
 
-	err = router.Run("0.0.0.0:" + port)
+	err = router.Run(":" + port)
 	if err != nil {
 		return
 	}
