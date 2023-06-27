@@ -1,8 +1,13 @@
 # blog-api
 An API for a blog service that allows users to create, view, update and delete posts without authorization.
 
-Users are not required to create accounts first.
-Create a post right away with a username and some text
+No sign ups required.
+Create a post right away with a username and some text.
+
+This api could be used to for a web app like [Telegraph](https://telegra.ph).👈🏾 Click on the link for context if neccessary
+
+This Project was built as a submission for a [Slightly Techie Network](https://slightlytechie.com/) Challenge
+
 
 ## API Documentation
 Main URL: https://blog-api-kf6i.onrender.com
