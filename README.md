@@ -5,7 +5,7 @@ Users are not required to create accounts first.
 Create a post right away with a username and some text
 
 ## API Documentation
-Main URL:
+Main URL: https://blog-api-kf6i.onrender.com
 
 ### Create Post
 End Point: /api/post <br>
