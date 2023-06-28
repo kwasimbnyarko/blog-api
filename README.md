@@ -10,10 +10,10 @@ This Project was built as a submission for a [Slightly Techie Network](https://s
 
 
 ## API Documentation
-Main URL: https://blog-api-kf6i.onrender.com
+Main URL: https://blog-api-kf6i.onrender.com/api/
 
 ### Create Post
-End Point: /api/post <br>
+End Point: /post <br>
 Method: POST <br>
 Request Body:<br>
 
@@ -25,19 +25,19 @@ Request Body:<br>
 ```
 
 ### View Post
-End Point: /api/post/:postId <br>
+End Point: /post/:postId <br>
 Method: GET <br>
 
 ### View All Posts From A User
-End Point: /api/post/user/:username <br>
+End Point: /post/user/:username <br>
 Method: GET <br>
 
 ### View All Posts
-End Point: /api/post <br>
+End Point: /post <br>
 Method: GET<br>
 
 ### Update Post
-End Point: /api/post/:postId <br>
+End Point: /post/:postId <br>
 Method: PUT <br>
 
 ```json 
@@ -59,5 +59,5 @@ An example for updating just title and text<br>
 ```
 
 ### Delete Post
-End Point: /api/post/:postId <br>
+End Point: /post/:postId <br>
 Method: DELETE <br>

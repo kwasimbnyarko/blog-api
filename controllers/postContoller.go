@@ -20,6 +20,12 @@ var validate = validator.New()
 
 var postCollection = database.OpenCollection(database.Client, "post")
 
+func Awake() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.String(http.StatusCreated, "Server running \nVisit https://github.com/kwasimbnyarko/blog-api for details")
+	}
+}
+
 func CreatePost() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var post models.Post
@@ -149,6 +155,7 @@ func UpdatePost() gin.HandlerFunc {
 		Text     *string `json:"text" bson:"text" validate:"required"`
 	}
 	return func(c *gin.Context) {
+
 		postId := c.Param("postId")
 
 		var post models.Post

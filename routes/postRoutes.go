@@ -7,6 +7,7 @@ import (
 
 func PostRoutes(incomingRoutes *gin.Engine) {
 
+	incomingRoutes.GET("/api", controllers.Awake())
 	incomingRoutes.POST("/api/post", controllers.CreatePost())
 	incomingRoutes.GET("/api/post/:postId", controllers.ViewPost())
 	incomingRoutes.GET("/api/post", controllers.ViewAllPost())
