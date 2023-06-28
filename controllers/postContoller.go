@@ -144,7 +144,9 @@ func ViewAllPostsFromUser() gin.HandlerFunc {
 
 func UpdatePost() gin.HandlerFunc {
 	type body struct {
-		Text string `json:"text" bson:"text"`
+		Username *string `json:"username" bson:"username" validate:"required"`
+		Title    *string `bson:"title" json:"title" validate:"required"`
+		Text     *string `json:"text" bson:"text" validate:"required"`
 	}
 	return func(c *gin.Context) {
 		postId := c.Param("postId")
@@ -167,7 +169,18 @@ func UpdatePost() gin.HandlerFunc {
 
 		var updateObj primitive.D
 
-		updateObj = append(updateObj, bson.E{Key: "text", Value: body.Text})
+		if *body.Username != "" {
+			updateObj = append(updateObj, bson.E{Key: "username", Value: body.Username})
+		}
+
+		if *body.Title != "" {
+			updateObj = append(updateObj, bson.E{Key: "title", Value: body.Title})
+		}
+
+		if *body.Text != "" {
+			updateObj = append(updateObj, bson.E{Key: "text", Value: body.Text})
+		}
+
 		updatedAt, _ := time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
 		updateObj = append(updateObj, bson.E{Key: "updated_At", Value: updatedAt})
 

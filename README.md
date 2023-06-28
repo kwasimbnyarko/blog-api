@@ -39,11 +39,25 @@ Method: GET<br>
 ### Update Post
 End Point: /api/post/:postId <br>
 Method: PUT <br>
+
 ```json 
 {
-    "text" : " "
+    "username" : "",
+    "title" : "",
+    "text" : ""
 }
 ```
+
+Set unrequired fields to ""<br>
+An example for updating just title and text<br>
+```json 
+{
+    "username":"",
+    "title" : "RW",
+    "text" : "real wai"
+}
+```
+
 ### Delete Post
 End Point: /api/post/:postId <br>
 Method: DELETE <br>
