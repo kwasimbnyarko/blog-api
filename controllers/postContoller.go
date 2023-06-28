@@ -53,7 +53,7 @@ func CreatePost() gin.HandlerFunc {
 			c.JSON(http.StatusInternalServerError, bson.M{"error": "post creation failed"})
 			log.Fatal(err)
 		}
-		c.JSON(http.StatusCreated, bson.M{"sucess": "post created"})
+		c.JSON(http.StatusCreated, bson.M{"success": "post created"})
 	}
 }
 
@@ -198,7 +198,7 @@ func UpdatePost() gin.HandlerFunc {
 			Upsert: &upsert,
 		}
 
-		result, err := postCollection.UpdateOne(
+		_, err = postCollection.UpdateOne(
 			ctx,
 			filter,
 			bson.D{{Key: "$set", Value: updateObj}},
@@ -213,7 +213,7 @@ func UpdatePost() gin.HandlerFunc {
 
 		}
 
-		c.JSON(http.StatusOK, result)
+		c.JSON(http.StatusOK, bson.M{"success": "update successful"})
 	}
 }
 
@@ -224,13 +224,13 @@ func DeletePost() gin.HandlerFunc {
 		ctx, cancel := context.WithTimeout(context.Background(), time.Second*15)
 		defer cancel()
 
-		result, err := postCollection.DeleteOne(ctx, bson.M{"post_id": postId})
+		_, err := postCollection.DeleteOne(ctx, bson.M{"post_id": postId})
 
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, bson.M{"error": "error occurred upon deletion"})
 			log.Fatal(err)
 		}
 
-		c.JSON(http.StatusOK, result)
+		c.JSON(http.StatusOK, bson.M{"success": "post deleted"})
 	}
 }
