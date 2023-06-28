@@ -158,7 +158,6 @@ func UpdatePost() gin.HandlerFunc {
 
 		postId := c.Param("postId")
 
-		var post models.Post
 		var body body
 
 		if err := c.BindJSON(&body); err != nil {
@@ -167,12 +166,6 @@ func UpdatePost() gin.HandlerFunc {
 
 		ctx, cancel := context.WithTimeout(context.Background(), time.Second*15)
 		defer cancel()
-
-		err := postCollection.FindOne(ctx, bson.M{"post_id": postId}).Decode(&post)
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, bson.M{"error": "error occurred in finding post"})
-			log.Fatal(err)
-		}
 
 		var updateObj primitive.D
 
@@ -198,7 +191,7 @@ func UpdatePost() gin.HandlerFunc {
 			Upsert: &upsert,
 		}
 
-		_, err = postCollection.UpdateOne(
+		result, err := postCollection.UpdateOne(
 			ctx,
 			filter,
 			bson.D{{Key: "$set", Value: updateObj}},
@@ -207,10 +200,18 @@ func UpdatePost() gin.HandlerFunc {
 		defer cancel()
 
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, bson.M{"error": "update unsuccessfull"})
+			c.JSON(http.StatusInternalServerError, bson.M{"error": "update unsuccessful"})
 
 			log.Panicln(err)
 
+		}
+		if result.MatchedCount == 0 {
+			c.JSON(http.StatusNotFound, bson.M{"msg": "post not found"})
+			return
+		}
+		if result.ModifiedCount == 0 {
+			c.JSON(http.StatusNotModified, bson.M{"msg": "post not modified"})
+			return
 		}
 
 		c.JSON(http.StatusOK, bson.M{"success": "update successful"})
@@ -224,13 +225,18 @@ func DeletePost() gin.HandlerFunc {
 		ctx, cancel := context.WithTimeout(context.Background(), time.Second*15)
 		defer cancel()
 
-		_, err := postCollection.DeleteOne(ctx, bson.M{"post_id": postId})
+		result, err := postCollection.DeleteOne(ctx, bson.M{"post_id": postId})
 
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, bson.M{"error": "error occurred upon deletion"})
 			log.Fatal(err)
 		}
 
-		c.JSON(http.StatusOK, bson.M{"success": "post deleted"})
+		if result.DeletedCount > 0 {
+			c.JSON(http.StatusOK, bson.M{"success": "post deleted"})
+			return
+		}
+		c.JSON(http.StatusNotFound, bson.M{"msg": "post not found"})
+
 	}
 }
