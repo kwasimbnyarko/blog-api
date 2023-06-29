@@ -1,7 +1,7 @@
 # blog-api
 An API for a blog service that allows users to create, view, update and delete posts without authorization.
 
-No sign ups required.
+No sign-ups required.
 Create a post right away with a username and some text.
 
 This api could be used to for a web app like [Telegraph](https://telegra.ph). (👈🏾 Click on the link for context if necessary)
