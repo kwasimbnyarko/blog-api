@@ -68,6 +68,7 @@ func ViewPost() gin.HandlerFunc {
 		defer cancel()
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, bson.M{"error": "error occured while finidng post"})
+			return
 		}
 		c.JSON(http.StatusOK, post)
 	}
@@ -81,7 +82,7 @@ func ViewAllPost() gin.HandlerFunc {
 
 		cursor, err := postCollection.Find(ctx, bson.M{})
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, bson.M{"error": "error occurred while getting employees"})
+			c.JSON(http.StatusInternalServerError, bson.M{"error": "error occurred while getting posts"})
 			log.Panic(err)
 		}
 
