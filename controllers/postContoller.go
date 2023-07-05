@@ -32,6 +32,7 @@ func CreatePost() gin.HandlerFunc {
 
 		if err := c.BindJSON(&post); err != nil {
 			c.JSON(http.StatusBadRequest, bson.M{"error": "incorrect request body"})
+			return
 		}
 
 		post.CreatedAt, _ = time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
